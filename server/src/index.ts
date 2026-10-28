@@ -18,6 +18,7 @@ import { nlpRouter } from './modules/nlp/nlp.routes.js';
 import { registerChatSocket } from './sockets/chat.socket.js';
 import { errorHandler } from './middleware/error.js';
 import { passwordChangeGate } from './middleware/auth.js';
+import { prisma } from './prisma/client.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -77,11 +78,16 @@ app.use('/api/nlp', nlpRouter);
 // Health check
 app.get('/api/health', async (_req, res) => {
   try {
-    const { prisma } = await import('./prisma/client.js');
-    const userCount = await prisma.user.count();
-    res.json({ ok: true, db: true, userCount, timestamp: new Date().toISOString() });
-  } catch (err: any) {
-    res.status(500).json({ ok: false, db: false, error: err?.message || String(err), timestamp: new Date().toISOString() });
+    await prisma.$queryRaw`SELECT 1`;
+    res.json({ ok: true, db: true, timestamp: new Date().toISOString() });
+  } catch (error) {
+    const errorName = error instanceof Error ? error.name : 'UnknownError';
+    const errorCode = typeof error === 'object' && error !== null && 'code' in error &&
+      typeof error.code === 'string'
+      ? error.code
+      : 'unknown';
+    console.error(`[health] Database readiness check failed (${errorName}, ${errorCode})`);
+    res.status(503).json({ ok: false, db: false, timestamp: new Date().toISOString() });
   }
 });
 

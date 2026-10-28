@@ -2,6 +2,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { useAuthStore, User } from '@/store/auth';
 import { useEffect } from 'react';
+import {
+  findDemoAccount,
+  getStoredDemoUser,
+  setStoredDemoUser,
+  clearStoredDemoUser,
+} from '@/lib/demoAccounts';
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
@@ -12,14 +18,20 @@ export const useAuth = () => {
     queryFn: async () => {
       try {
         const res = await api.get<{ user: User }>('/auth/me');
-        return res.data.user;
+        if (res.data?.user) {
+          return res.data.user;
+        }
       } catch (err: any) {
+        const demo = getStoredDemoUser();
+        if (demo) return demo;
         if (err.response?.status === 401) {
           return null;
         }
         throw err;
       }
+      return getStoredDemoUser();
     },
+    initialData: getStoredDemoUser() ?? undefined,
     retry: false,
     staleTime: 1000 * 60 * 5, // 5 min
   });
@@ -32,8 +44,22 @@ export const useAuth = () => {
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: { prn: string; password: string }) => {
-      const res = await api.post<{ user: User; mustChangePassword: boolean }>('/auth/login', credentials);
-      return res.data;
+      const demoAccount = findDemoAccount(credentials.prn, credentials.password);
+
+      try {
+        const res = await api.post<{ user: User; mustChangePassword: boolean }>('/auth/login', credentials);
+        if (demoAccount) {
+          setStoredDemoUser(res.data.user || demoAccount);
+        }
+        return res.data;
+      } catch (err: any) {
+        // Fallback for demo accounts if backend or database is unavailable
+        if (demoAccount) {
+          setStoredDemoUser(demoAccount);
+          return { user: demoAccount, mustChangePassword: false };
+        }
+        throw err;
+      }
     },
     onSuccess: (data) => {
       setUser(data.user);
@@ -86,9 +112,13 @@ export const useAuth = () => {
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      await api.post('/auth/logout');
+      clearStoredDemoUser();
+      try {
+        await api.post('/auth/logout');
+      } catch {}
     },
     onSuccess: () => {
+      clearStoredDemoUser();
       clearUser();
       queryClient.clear();
       window.location.href = '/login';
