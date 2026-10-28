@@ -75,8 +75,18 @@ app.use('/api/uploads', uploadRouter);
 app.use('/api/nlp', nlpRouter);
 
 // Health check
-app.get('/api/health', (_req, res) => {
-  res.json({ ok: true, timestamp: new Date().toISOString() });
+app.get('/api/health', async (_req, res) => {
+  try {
+    const { prisma } = await import('./prisma/client.js');
+    const userCount = await prisma.user.count();
+    const demoUser = await prisma.user.findUnique({
+      where: { prn: '241107068' },
+      select: { prn: true, name: true, role: true, isActive: true },
+    });
+    res.json({ ok: true, db: true, userCount, demoUser, timestamp: new Date().toISOString() });
+  } catch (err: any) {
+    res.status(500).json({ ok: false, db: false, error: err?.message || String(err), timestamp: new Date().toISOString() });
+  }
 });
 
 // Error handling
