@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: camp-exchange-server
+    runtime: node
+    rootDir: .
+    buildCommand: npm install && npm run build:server
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "4000"
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CLIENT_ORIGIN
+        sync: false
+      - key: COLLEGE_EMAIL_DOMAIN
+        sync: false
+      - key: UPLOAD_DIR
+        value: ./uploads
+      - key: MAX_IMAGE_MB
+        value: "5"
+      - key: NLP_URL
+        value: http://localhost:8001
+      # Optional integrations (leave blank to disable gracefully)
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+      - key: TURNSTILE_SECRET_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false

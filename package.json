@@ -14,6 +14,8 @@
     "dev:client": "npm run dev -w client",
     "dev:nlp": "node scripts/run-nlp.js -m uvicorn app.main:app --app-dir nlp --port 8001 --reload",
     "build": "npm run build -w server && npm run build -w client",
+    "build:server": "npm run build -w server",
+    "start": "npm run start -w server",
     "lint": "npm run lint -w server && npm run lint -w client",
     "typecheck": "npm run typecheck -w server && npm run typecheck -w client",
     "test": "npm run test -w server && npm run test -w client && npm run test:nlp",
