@@ -4,7 +4,7 @@ let socket: Socket | null = null;
 
 export const getSocket = (): Socket => {
   if (!socket) {
-    const socketUrl = import.meta.env.VITE_SOCKET_URL || 'http://localhost:4000';
+    const socketUrl = import.meta.env.VITE_SOCKET_URL || window.location.origin;
     socket = io(socketUrl, {
       withCredentials: true,
       autoConnect: true,

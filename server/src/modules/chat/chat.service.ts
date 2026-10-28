@@ -118,7 +118,7 @@ export const getInbox = async (
 
   // Calculate unread count per thread
   const formatted = await Promise.all(
-    conversations.map(async (conv) => {
+    conversations.map(async (conv: (typeof conversations)[number]) => {
       const isBuyer = conv.buyerId === userId;
       const otherUser = isBuyer ? conv.seller : conv.buyer;
       const lastReadAt = isBuyer ? conv.buyerLastReadAt : conv.sellerLastReadAt;
@@ -145,7 +145,7 @@ export const getInbox = async (
   );
 
   if (filter === 'unread') {
-    return formatted.filter((c) => c.unreadCount > 0);
+    return formatted.filter((c: (typeof formatted)[number]) => c.unreadCount > 0);
   }
 
   return formatted;

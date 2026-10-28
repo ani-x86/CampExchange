@@ -21,8 +21,8 @@ build/
 # SQLite & Uploads
 dev.db
 dev.db-journal
-uploads/
-server/uploads/
+/uploads/
+/server/uploads/
 server/prisma/dev.db
 server/prisma/dev.db-journal
 

@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import { parse } from 'csv-parse/sync';
 import { z } from 'zod';
 import { prisma } from '../prisma/client.js';
+import { Prisma } from '@prisma/client';
 
 const studentRowSchema = z.object({
   roll_no: z.string().trim().regex(/^\d+$/).transform(Number).pipe(z.number().int().min(1).max(999)),
@@ -153,7 +154,7 @@ export const importStudents = async (options: ImportOptions = {}): Promise<Impor
 
   const summary = emptySummary();
   try {
-    await prisma.$transaction(async (transaction) => {
+    await prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       for (const student of students) {
         const existing = await transaction.user.findUnique({
           where: { prn: student.prn },

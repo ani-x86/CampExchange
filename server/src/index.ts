@@ -14,6 +14,7 @@ import { orderRouter, meOrdersHandler } from './modules/orders/order.routes.js';
 import { chatRouter } from './modules/chat/chat.routes.js';
 import { uploadRouter } from './modules/uploads/upload.routes.js';
 import { adminRouter } from './modules/admin/admin.routes.js';
+import { nlpRouter } from './modules/nlp/nlp.routes.js';
 import { registerChatSocket } from './sockets/chat.socket.js';
 import { errorHandler } from './middleware/error.js';
 import { passwordChangeGate } from './middleware/auth.js';
@@ -60,6 +61,7 @@ app.use('/api/me', meRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/conversations', chatRouter);
 app.use('/api/uploads', uploadRouter);
+app.use('/api/nlp', nlpRouter);
 
 // Health check
 app.get('/api/health', (_req, res) => {
@@ -70,10 +72,11 @@ app.get('/api/health', (_req, res) => {
 app.use(errorHandler);
 
 // Start server
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
   server.listen(env.PORT, () => {
     console.log(`Camp-Exchange server running on http://localhost:${env.PORT}`);
   });
 }
 
 export { app, server };
+export default app;

@@ -277,7 +277,7 @@ export const submitPaymentProof = async (
   if (resendEnabled) {
     import('../email/email.service.js').then(({ sendProofReceivedEmail }) => {
       prisma.user.findUnique({ where: { id: order.sellerId }, select: { email: true, name: true } })
-        .then((seller) => {
+        .then((seller: { email: string | null; name: string } | null) => {
           if (seller?.email) {
             sendProofReceivedEmail(seller.email, seller.name, order.listing.title, order.amount, order.id).catch(() => {});
           }
@@ -355,7 +355,7 @@ export const confirmOrder = async (orderId: string, sellerId: string) => {
   if (resendEnabled) {
     import('../email/email.service.js').then(({ sendOrderConfirmedEmail }) => {
       prisma.user.findUnique({ where: { id: order.buyerId }, select: { email: true, name: true } })
-        .then((buyer) => {
+        .then((buyer: { email: string | null; name: string } | null) => {
           if (buyer?.email) {
             sendOrderConfirmedEmail(buyer.email, buyer.name, order.listing.title, order.amount).catch(() => {});
           }
@@ -431,7 +431,7 @@ export const rejectOrder = async (
   if (resendEnabled) {
     import('../email/email.service.js').then(({ sendOrderRejectedEmail }) => {
       prisma.user.findUnique({ where: { id: order.buyerId }, select: { email: true, name: true } })
-        .then((buyer) => {
+        .then((buyer: { email: string | null; name: string } | null) => {
           if (buyer?.email) {
             sendOrderRejectedEmail(buyer.email, buyer.name, order.listing.title, input.reason).catch(() => {});
           }
@@ -539,3 +539,5 @@ if (process.env.NODE_ENV !== 'test') {
     cancelStaleOrders().catch(() => {});
   }, 5 * 60 * 1000);
 }
+
+

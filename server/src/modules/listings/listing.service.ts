@@ -76,7 +76,7 @@ export const getListings = async (query: ListingQueryInput, currentUserId?: stri
     nextCursor = nextItem?.id || null;
   }
 
-  const formattedItems = items.map((item) => ({
+  const formattedItems = items.map((item: (typeof items)[number]) => ({
     ...item,
     isSaved: currentUserId ? item.savedBy && item.savedBy.length > 0 : false,
     savedBy: undefined,
@@ -272,5 +272,5 @@ export const getMySavedListings = async (userId: string) => {
     orderBy: { listing: { createdAt: 'desc' } },
   });
 
-  return saved.map((s) => ({ ...s.listing, isSaved: true }));
+  return saved.map((s: (typeof saved)[number]) => ({ ...s.listing, isSaved: true }));
 };

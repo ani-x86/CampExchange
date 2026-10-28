@@ -59,9 +59,17 @@ MAX_IMAGE_MB=5
 ```
 `client/.env.example`
 ```
-VITE_API_URL=http://localhost:4000/api
-VITE_SOCKET_URL=http://localhost:4000
+VITE_API_URL=/api
+VITE_SOCKET_URL=
 ```
+
+Vite proxies `/api` and `/socket.io` to the local Express service during
+development.
+
+In the Vercel multi-service deployment, the client uses same-origin `/api` and
+Socket.IO paths. The Express service receives `NLP_URL` through its service
+binding to the internal FastAPI service; do not configure that binding variable
+manually in Vercel.
 
 ## Performance rules
 Route-level code splitting · images resized to 1200px WebP via sharp + 400px thumbnails · cursor pagination · React Query caching · skeletons not spinners · `loading="lazy"` on images · virtualise inbox/message lists > 200 items.
