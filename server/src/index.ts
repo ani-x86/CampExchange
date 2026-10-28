@@ -22,10 +22,21 @@ import { passwordChangeGate } from './middleware/auth.js';
 const app = express();
 const server = http.createServer(app);
 
+// Trust Render/Vercel proxies
+app.set('trust proxy', 1);
+
+const allowedOrigins = env.CLIENT_ORIGIN.split(',').map((v) => v.trim()).filter(Boolean);
+
+const corsOrigin: cors.CorsOptions['origin'] = (origin, callback) => {
+  if (!origin) { callback(null, true); return; }
+  if (allowedOrigins.includes(origin)) { callback(null, true); return; }
+  callback(new Error(`CORS: origin ${origin} not allowed`));
+};
+
 // Socket.IO
 export const io = new SocketIOServer(server, {
   cors: {
-    origin: env.CLIENT_ORIGIN,
+    origin: allowedOrigins,
     credentials: true,
   },
 });
@@ -35,7 +46,7 @@ registerChatSocket(io);
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(
   cors({
-    origin: env.CLIENT_ORIGIN,
+    origin: corsOrigin,
     credentials: true,
   })
 );

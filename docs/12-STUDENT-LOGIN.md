@@ -19,7 +19,7 @@ The first seed imports students only. The optional `--demo` run adds eight listi
 ## First login
 
 1. Enter the nine-digit PRN and the department-provided temporary password.
-2. The server verifies the password with bcrypt and sets an httpOnly, SameSite=Lax, seven-day JWT cookie (Secure in production).
+2. The server verifies the password with bcrypt and sets an httpOnly, seven-day JWT cookie (`SameSite=None; Secure` in production for cross-origin Vercel-to-Render requests; SameSite=Lax otherwise).
 3. Because `mustChangePassword` is true, the app blocks all API calls except `/auth/me`, `/auth/logout`, and `/auth/change-password`, hides navigation and requires a new password before showing the marketplace.
 4. The new password must be at least eight characters and contain a letter and a number. It must differ from the current password and may not equal the PRN or first name.
 5. A successful change clears `mustChangePassword`, records `passwordChangedAt`, increments `tokenVersion`, and issues a new cookie. Previous sessions stop working.

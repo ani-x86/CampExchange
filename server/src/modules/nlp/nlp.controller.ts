@@ -6,7 +6,10 @@ const forwardToNlp =
   (endpoint: string) =>
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const baseUrl = new URL(env.NLP_URL);
+      const nlpUrl = /^[a-z][a-z\d+.-]*:\/\//i.test(env.NLP_URL)
+        ? env.NLP_URL
+        : `http://${env.NLP_URL}`;
+      const baseUrl = new URL(nlpUrl);
       baseUrl.pathname = `${baseUrl.pathname.replace(/\/+$/, '')}/${endpoint}`;
       const response = await axios.post(baseUrl.toString(), req.body, { timeout: 3000 });
       res.json(response.data);

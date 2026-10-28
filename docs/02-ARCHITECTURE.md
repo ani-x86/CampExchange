@@ -66,10 +66,18 @@ VITE_SOCKET_URL=
 Vite proxies `/api` and `/socket.io` to the local Express service during
 development.
 
-In the Vercel multi-service deployment, the client uses same-origin `/api` and
-Socket.IO paths. The Express service receives `NLP_URL` through its service
-binding to the internal FastAPI service; do not configure that binding variable
-manually in Vercel.
+## Deployment
+
+The React client is deployed as a Vite SPA on Vercel. The Express API runs as a
+public Render web service, while FastAPI runs as an internal Render private
+service. Render supplies the NLP service's private host and port to the API
+through `NLP_URL`; the API adds the HTTP scheme when that service reference has
+no scheme.
+
+Set `CLIENT_ORIGIN` on the Render API to the production Vercel domain. Once
+Render assigns the API's public hostname, set the Vercel build variables
+`VITE_API_URL` (including `/api`) and `VITE_SOCKET_URL` to that API origin.
+Do not guess or commit the Render hostname before it is assigned.
 
 ## Performance rules
 Route-level code splitting · images resized to 1200px WebP via sharp + 400px thumbnails · cursor pagination · React Query caching · skeletons not spinners · `loading="lazy"` on images · virtualise inbox/message lists > 200 items.

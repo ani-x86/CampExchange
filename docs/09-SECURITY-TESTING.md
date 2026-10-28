@@ -4,7 +4,7 @@
 - Passwords: bcrypt cost 12. Imported temporary passwords are changed on first login; new passwords require at least 8 characters with letters and digits. Never log passwords, hashes, or database URLs.
 - PRN login: generic failure message for unknown PRNs and bad passwords; dummy bcrypt compare for unknown PRNs; lock after 5 failed attempts for 15 minutes; auth rate limit 10/minute/IP.
 - Session invalidation: JWT carries `tokenVersion`; password changes and administrator resets increment it.
-- Session: JWT 7d in httpOnly, `SameSite=Lax`, `Secure` in prod cookie. CSRF: SameSite + custom header check on mutating requests.
+- Session: JWT 7d in httpOnly cookie; `SameSite=None; Secure` in production because the Vercel client and Render API use different origins, `SameSite=Lax` otherwise. CSRF: SameSite + custom header check on mutating requests.
 - Helmet, CORS allow-list (`CLIENT_ORIGIN`), `express-rate-limit`: auth 10/min/IP, general 200/min, upload 20/min, chat 30/min.
 - Zod validation on body/query/params. Reject unknown fields.
 - Authorisation checks in services (owner/participant/seller/buyer) – never trust ids from client.

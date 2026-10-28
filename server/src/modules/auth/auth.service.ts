@@ -13,7 +13,7 @@ const dummyPasswordHash = bcrypt.hash(randomBytes(32).toString('hex'), BCRYPT_RO
 export const setAuthCookie = (res: Response, token: string): void => {
   res.cookie(COOKIE_NAME, token, {
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
     secure: env.NODE_ENV === 'production',
     maxAge: 7 * 24 * 60 * 60 * 1000,
     path: '/',
@@ -23,7 +23,7 @@ export const setAuthCookie = (res: Response, token: string): void => {
 export const clearAuthCookie = (res: Response): void => {
   res.clearCookie(COOKIE_NAME, {
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
     secure: env.NODE_ENV === 'production',
     path: '/',
   });
@@ -211,4 +211,3 @@ export const registerUser = async (input: RegisterInput) => {
     message: 'Verification code sent to your email address.',
   };
 };
-

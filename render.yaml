@@ -3,19 +3,20 @@ services:
     name: camp-exchange-server
     runtime: node
     rootDir: .
-    buildCommand: npm install && npm run build:server
+    buildCommand: npm ci && npm run build:server && npm run db:deploy -w server
     startCommand: npm start
+    healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: "4000"
       - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
         sync: false
       - key: JWT_SECRET
         sync: false
       - key: CLIENT_ORIGIN
-        sync: false
+        value: https://camp-exchange-4dia.vercel.app
       - key: COLLEGE_EMAIL_DOMAIN
         sync: false
       - key: UPLOAD_DIR
@@ -23,8 +24,10 @@ services:
       - key: MAX_IMAGE_MB
         value: "5"
       - key: NLP_URL
-        value: http://localhost:8001
-      # Optional integrations (leave blank to disable gracefully)
+        fromService:
+          type: web
+          name: camp-exchange-nlp
+          property: hostport
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
       - key: CLOUDINARY_API_KEY
@@ -37,5 +40,14 @@ services:
         sync: false
       - key: TURNSTILE_SECRET_KEY
         sync: false
+
+  - type: pserv
+    name: camp-exchange-nlp
+    runtime: python
+    rootDir: nlp
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
       - key: GEMINI_API_KEY
         sync: false

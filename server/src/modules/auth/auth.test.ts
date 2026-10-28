@@ -52,6 +52,7 @@ describe('PRN auth API', () => {
     expect(response.body.user.passwordHash).toBeUndefined();
     expect(JSON.stringify(response.body)).not.toContain(testPassword);
     expect(getCookie(response).some((value) => value.includes('cx_token='))).toBe(true);
+    expect(getCookie(response).some((value) => value.includes('SameSite=Lax'))).toBe(true);
   });
 
   it('uses the same generic message and similar work for wrong and unknown PRNs', async () => {

@@ -106,3 +106,16 @@ The first seed imports students only. The second reruns the idempotent import an
 The student CSV is read from `databse/student.csv` or, if absent, the discovered `Database/student.csv` path. It must have `roll_no,prn,name,password` columns. Validation completes for every row before any database write. Duplicate PRNs/roll numbers abort the import. Existing password hashes are preserved unless `--reset-passwords` is explicitly supplied. Plaintext passwords are never logged or written to the database; remove the CSV after seeding.
 
 `--demo` adds eight listings across categories, owned by two imported students, and one conversation. Demo data is disabled when `NODE_ENV=production`.
+
+## Supabase connection settings
+
+For the long-running Render API, configure `DATABASE_URL` with the Supavisor
+session pooler (port `5432`). Configure `DIRECT_URL` with the project's direct
+Postgres connection for Prisma migrations, or the session pooler on port `5432`
+when the host cannot use the direct endpoint. Both URLs use the database
+password; never commit either URL. Use the transaction pooler (port `6543`)
+with `pgbouncer=true` only for serverless application connections.
+
+The initial Prisma migration enables RLS on every application table in
+`public`. The Express backend connects directly with the server-side database
+credentials; the browser must not use a Supabase database secret.

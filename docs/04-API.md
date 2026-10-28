@@ -6,7 +6,7 @@ Base path `/api`; JSON; authentication uses the `cx_token` httpOnly cookie. Erro
 
 | Method | Path | Body | Notes |
 |---|---|---|---|
-| POST | `/auth/login` | `{prn,password}` | PRN is exactly 9 digits; sets 7-day `SameSite=Lax`, httpOnly cookie, Secure in production; response `{user,mustChangePassword}` |
+| POST | `/auth/login` | `{prn,password}` | PRN is exactly 9 digits; sets 7-day httpOnly cookie (`SameSite=None; Secure` in production for the cross-origin Vercel client, `SameSite=Lax` otherwise); response `{user,mustChangePassword}` |
 | POST | `/auth/change-password` | `{currentPassword,newPassword}` | Auth required; min 8, letters and digits; invalidates old JWTs and renews the cookie |
 | POST | `/auth/logout` | - | Clears cookie |
 | GET | `/auth/me` | - | Current safe user object, including `mustChangePassword` |
