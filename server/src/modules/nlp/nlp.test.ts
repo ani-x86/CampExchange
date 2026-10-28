@@ -16,6 +16,9 @@ vi.mock('../../config/env.js', () => ({
 const app = express();
 app.use(express.json());
 app.post('/describe', validateRequest(describeSchema), describeHandler);
+app.get('/internal-error', (_req, _res, next) => {
+  next(new Error('database connection details must not be exposed'));
+});
 app.use(errorHandler);
 
 afterEach(() => {
@@ -81,5 +84,19 @@ describe('NLP proxy API', () => {
 
     expect(response.status).toBe(503);
     expect(response.body.error.code).toBe('NLP_UNAVAILABLE');
+  });
+
+  it('hides internal server error details from API responses', async () => {
+    const logError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const response = await request(app).get('/internal-error');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toEqual({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'An unexpected error occurred',
+    });
+    expect(JSON.stringify(response.body)).not.toContain('database connection details');
+    expect(logError).toHaveBeenCalledWith('[api] GET /internal-error failed (Error, unknown)');
   });
 });

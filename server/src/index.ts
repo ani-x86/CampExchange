@@ -86,6 +86,23 @@ app.use(errorHandler);
 if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
   server.listen(env.PORT, () => {
     console.log(`Camp-Exchange server running on http://localhost:${env.PORT}`);
+
+    // Keep Render free tier alive by self-pinging every 10 minutes (Render sleeps after 15 min)
+    if (process.env.NODE_ENV === 'production') {
+      const keepAliveUrl = process.env.RENDER_EXTERNAL_URL
+        ? `${process.env.RENDER_EXTERNAL_URL}/api/health`
+        : 'https://campexchange.onrender.com/api/health';
+
+      const TEN_MINUTES_MS = 10 * 60 * 1000;
+      setInterval(async () => {
+        try {
+          const res = await fetch(keepAliveUrl);
+          console.log(`[Keep-Alive] Pinged ${keepAliveUrl} -> status ${res.status}`);
+        } catch (err: any) {
+          console.warn(`[Keep-Alive] Ping failed:`, err?.message || err);
+        }
+      }, TEN_MINUTES_MS);
+    }
   });
 }
 

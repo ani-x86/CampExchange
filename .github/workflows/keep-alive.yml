@@ -1,0 +1,24 @@
+name: Render Backend Keep-Alive
+
+on:
+  schedule:
+    # Runs every 10 minutes (Render free tier spins down after 15 minutes of inactivity)
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions dashboard
+
+jobs:
+  keep-alive:
+    name: Ping Render Health Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send HTTP GET to Render Health Check
+        run: |
+          URL="https://campexchange.onrender.com/api/health"
+          echo "Pinging Render server at $URL..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 "$URL")
+          echo "Received HTTP status code: $HTTP_STATUS"
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "Success: Render backend is awake and healthy."
+          else
+            echo "Warning: Render health check returned HTTP $HTTP_STATUS"
+          fi
