@@ -1,0 +1,17 @@
+{
+  "friendly": {
+    "intro": "Selling {item}{age_phrase}{condition_phrase}.",
+    "details": "{flaws_phrase}{working_phrase}{accessories_phrase}",
+    "outro": "Well-kept and ready for use on campus! Let me know if you are interested."
+  },
+  "neutral": {
+    "intro": "Up for sale: {item}{age_phrase}{condition_phrase}.",
+    "details": "{flaws_phrase}{working_phrase}{accessories_phrase}",
+    "outro": "Available for immediate pickup on campus."
+  },
+  "concise": {
+    "intro": "{item}{age_phrase}.",
+    "details": "{condition_phrase}{flaws_phrase}{working_phrase}{accessories_phrase}",
+    "outro": "Ready for campus pickup."
+  }
+}

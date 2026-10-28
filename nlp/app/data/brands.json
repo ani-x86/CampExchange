@@ -1,0 +1,9 @@
+{
+  "Vehicles": ["Hero", "Hercules", "Btwin", "Firefox", "Avon", "Montra", "BSA", "Decathlon", "Mach City", "Trek", "Giant"],
+  "Electronics": ["Apple", "Samsung", "Dell", "HP", "Lenovo", "Asus", "Acer", "Sony", "Logitech", "Casio", "Boat", "OnePlus", "Xiaomi", "Realme", "JBL", "Noise", "Zebronics", "SanDisk", "Anker", "iPad", "MacBook", "ThinkPad"],
+  "Books": ["Cormen", "CLRS", "Boylestad", "Galvin", "Tanenbaum", "Korth", "Resnick", "Halliday", "HC Verma", "RD Sharma", "Pearson", "McGraw Hill", "Wiley", "O'Reilly"],
+  "Lab & Stationery": ["Casio", "Drafter", "Omega", "Camlin", "Rotring", "Staedtler", "Classmate"],
+  "Hostel & Kitchen": ["Prestige", "Pigeon", "Bajaj", "Havells", "Philips", "Milton", "Cello", "Usha", "Orient"],
+  "Furniture": ["Nilkamal", "Ikea", "Wakefit", "Godrej", "Featherlite"],
+  "Sports": ["Yonex", "Cosco", "Nivia", "Wilson", "Decathlon", "Quechua", "Kipsta", "Spalding", "Li-Ning"]
+}

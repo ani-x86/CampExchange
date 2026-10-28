@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum Condition {
+  NEW
+  LIKE_NEW
+  GOOD
+  FAIR
+}
+
+enum ListingStatus {
+  ACTIVE
+  RESERVED
+  SOLD
+  REMOVED
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PROOF_SUBMITTED
+  CONFIRMED
+  REJECTED
+  CANCELLED
+}
+
+model User {
+  id                  String   @id @default(cuid())
+  prn                 String   @unique
+  rollNo              Int
+  batch               String?
+  branch              String?  @default("AIML")
+  year                String?
+  name                String
+  email               String?  @unique
+  passwordHash        String
+  mustChangePassword  Boolean  @default(true)
+  passwordChangedAt   DateTime?
+  failedLoginCount    Int      @default(0)
+  lockedUntil         DateTime?
+  lastLoginAt         DateTime?
+  isActive            Boolean  @default(true)
+  tokenVersion        Int      @default(0)
+  hostel              String?
+  bio                 String?
+  avatarUrl           String?
+  upiId               String?
+  upiName             String?
+  /// "STUDENT" | "ADMIN"
+  role                Role     @default(STUDENT)
+  /// Email verified flag (set after OTP or Google OAuth)
+  emailVerified       Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  listings            Listing[]
+  buyOrders           Order[]        @relation("buyer")
+  sellOrders          Order[]        @relation("seller")
+  buyerConversations  Conversation[] @relation("buyerConversations")
+  sellerConversations Conversation[] @relation("sellerConversations")
+  saved               SavedListing[]
+  messages            Message[]
+  otpCodes            OtpCode[]
+
+  @@unique([rollNo, batch])
+}
+
+/// OTP codes for email verification
+model OtpCode {
+  id          String   @id @default(cuid())
+  userId      String
+  codeHash    String
+  expiresAt   DateTime
+  attempts    Int      @default(0)
+  lastSentAt  DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Listing {
+  id            String   @id @default(cuid())
+  sellerId      String
+  seller        User     @relation(fields: [sellerId], references: [id])
+  title         String
+  description   String
+  category      String
+  condition     Condition
+  price         Int
+  negotiable    Boolean  @default(false)
+  images        String[] @default([])
+  status        ListingStatus @default(ACTIVE)
+  tags          String[] @default([])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  orders        Order[]
+  conversations Conversation[]
+  savedBy       SavedListing[]
+
+  @@index([status, createdAt])
+  @@index([category])
+}
+
+model SavedListing {
+  userId    String
+  listingId String
+  user      User    @relation(fields: [userId], references: [id])
+  listing   Listing @relation(fields: [listingId], references: [id])
+
+  @@id([userId, listingId])
+}
+
+model Order {
+  id                String   @id @default(cuid())
+  listingId         String
+  buyerId           String
+  sellerId          String
+  amount            Int
+  status            OrderStatus @default(PENDING_PAYMENT)
+  proofUrl          String?
+  /// Cloudinary public_id for private proof assets (null for local storage)
+  proofCloudinaryId String?
+  utr               String?
+  rejectReason      String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  listing           Listing  @relation(fields: [listingId], references: [id])
+  buyer             User     @relation("buyer", fields: [buyerId], references: [id])
+  seller            User     @relation("seller", fields: [sellerId], references: [id])
+
+  @@index([buyerId])
+  @@index([sellerId])
+}
+
+model Conversation {
+  id               String    @id @default(cuid())
+  listingId        String
+  buyerId          String
+  sellerId         String
+  lastMessageAt    DateTime  @default(now())
+  listing          Listing   @relation(fields: [listingId], references: [id])
+  buyer            User      @relation("buyerConversations", fields: [buyerId], references: [id])
+  seller           User      @relation("sellerConversations", fields: [sellerId], references: [id])
+  messages         Message[]
+  buyerLastReadAt  DateTime?
+  sellerLastReadAt DateTime?
+
+  @@unique([listingId, buyerId, sellerId])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  senderId       String
+  type           String       @default("TEXT")
+  body           String?
+  imageUrl       String?
+  orderId        String?
+  createdAt      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  sender         User         @relation(fields: [senderId], references: [id])
+
+  @@index([conversationId, createdAt])
+}

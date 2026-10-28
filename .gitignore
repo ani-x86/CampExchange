@@ -1,0 +1,54 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Testing & Coverage
+coverage/
+.nyc_output/
+
+# Build artifacts
+dist/
+build/
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+*.env
+
+# SQLite & Uploads
+dev.db
+dev.db-journal
+uploads/
+server/uploads/
+server/prisma/dev.db
+server/prisma/dev.db-journal
+
+# Student import data (never commit source CSVs)
+databse/student.csv
+databse/*.csv
+Database/student.csv
+Database/*.csv
+
+# Python / NLP
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+nlp/.venv/
+nlp/__pycache__/
+*.joblib
+nlp/app/models/*.joblib
+.pytest_cache/
+
+# IDE / OS
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+pgdata/
+

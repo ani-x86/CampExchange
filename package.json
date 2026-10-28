@@ -1,0 +1,33 @@
+{
+  "name": "camp-exchange",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -p \"[{name}]\" -n \"SERVER,CLIENT,NLP\" -c \"blue.bold,cyan.bold,green.bold\" \"npm run dev -w server\" \"npm run dev -w client\" \"npm run dev:nlp\"",
+    "dev:all": "npm run dev",
+    "dev:server": "npm run dev -w server",
+    "dev:client": "npm run dev -w client",
+    "dev:nlp": "node scripts/run-nlp.js -m uvicorn app.main:app --app-dir nlp --port 8001 --reload",
+    "build": "npm run build -w server && npm run build -w client",
+    "lint": "npm run lint -w server && npm run lint -w client",
+    "typecheck": "npm run typecheck -w server && npm run typecheck -w client",
+    "test": "npm run test -w server && npm run test -w client && npm run test:nlp",
+    "test:nlp": "node scripts/run-nlp.js -m pytest nlp/tests",
+    "seed": "npm run seed -w server",
+    "db:migrate": "npm run db:migrate -w server",
+    "db:deploy": "npm run db:deploy -w server",
+    "db:seed": "npm run db:seed -w server --",
+    "db:import-students": "npm run db:import-students -w server --",
+    "db:reset": "npm run db:reset -w server",
+    "db:studio": "npm run db:studio -w server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3"
+  }
+}

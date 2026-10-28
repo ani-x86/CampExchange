@@ -1,0 +1,124 @@
+[
+  {
+    "text": "hero cycle 2 yrs old gears work fine small scratch on frame",
+    "expected_category": "Vehicles",
+    "expected_brand": "Hero",
+    "expected_age": "2 yrs old",
+    "expected_condition": "GOOD"
+  },
+  {
+    "text": "logitech wireless mouse m331 silent clicks works perfectly with usb receiver",
+    "expected_category": "Electronics",
+    "expected_brand": "Logitech",
+    "expected_condition": "GOOD"
+  },
+  {
+    "text": "introduction to algorithms cormen clrs 3rd edition clean pages no marks",
+    "expected_category": "Books",
+    "expected_brand": "Cormen",
+    "expected_condition": "GOOD"
+  },
+  {
+    "text": "nilkamal plastic study chair armless sturdy brown hostel furniture",
+    "expected_category": "Furniture",
+    "expected_brand": "Nilkamal",
+    "expected_condition": "GOOD"
+  },
+  {
+    "text": "pigeon electric kettle 1.5 litre stainless steel auto shut-off heats water fast",
+    "expected_category": "Hostel & Kitchen",
+    "expected_brand": "Pigeon",
+    "expected_condition": "GOOD"
+  },
+  {
+    "text": "college blazer navy blue size 38 worn only twice during placement drive",
+    "expected_category": "Clothing",
+    "expected_condition": "GOOD"
+  },
+  {
+    "text": "engineering mini drafter with clamp and scale for engineering graphics ed class",
+    "expected_category": "Lab & Stationery",
+    "expected_brand": "Drafter",
+    "expected_condition": "GOOD"
+  },
+  {
+    "text": "yonex nanoray light 18i badminton racket strung with bg65 string and full cover",
+    "expected_category": "Sports",
+    "expected_brand": "Yonex",
+    "expected_condition": "GOOD"
+  },
+  {
+    "text": "guitar acoustic yamaha f310 natural wood with bag picks and capo",
+    "expected_category": "Other",
+    "expected_condition": "GOOD"
+  },
+  {
+    "text": "btwin mybike single speed bicycle good tyres slightly rusted chain",
+    "expected_category": "Vehicles",
+    "expected_brand": "Btwin",
+    "expected_condition": "FAIR"
+  },
+  {
+    "text": "casio scientific calculator fx-991es plus brand new unopened sealed box",
+    "expected_category": "Electronics",
+    "expected_brand": "Casio",
+    "expected_condition": "NEW"
+  },
+  {
+    "text": "operating system concepts galvin 9th edition like new pristine barely used",
+    "expected_category": "Books",
+    "expected_brand": "Galvin",
+    "expected_condition": "LIKE_NEW"
+  },
+  {
+    "text": "wooden study table with drawer compact size for hostel room",
+    "expected_category": "Furniture",
+    "expected_condition": "GOOD"
+  },
+  {
+    "text": "prestige induction cooktop 1200 watts working smooth with push buttons",
+    "expected_category": "Hostel & Kitchen",
+    "expected_brand": "Prestige",
+    "expected_condition": "GOOD"
+  },
+  {
+    "text": "lab coat pure cotton white size L for chemistry lab",
+    "expected_category": "Clothing",
+    "expected_condition": "GOOD"
+  },
+  {
+    "text": "camlin wooden drawing board with clips half imperial size",
+    "expected_category": "Lab & Stationery",
+    "expected_brand": "Camlin",
+    "expected_condition": "GOOD"
+  },
+  {
+    "text": "nivia storm football size 5 durable rubber moulded ball",
+    "expected_category": "Sports",
+    "expected_brand": "Nivia",
+    "expected_condition": "GOOD"
+  },
+  {
+    "text": "american tourister trolley bag 55cm 4 spinner wheels cabin size",
+    "expected_category": "Other",
+    "expected_condition": "GOOD"
+  },
+  {
+    "text": "apple magic keyboard 2 mint condition with lightning charging cable",
+    "expected_category": "Electronics",
+    "expected_brand": "Apple",
+    "expected_condition": "LIKE_NEW"
+  },
+  {
+    "text": "cosco cricket ball unopened box of 3 red balls brand new",
+    "expected_category": "Sports",
+    "expected_brand": "Cosco",
+    "expected_condition": "NEW"
+  },
+  {
+    "text": "firefox mountain bike 21 speed shimano gears cracked pedal",
+    "expected_category": "Vehicles",
+    "expected_brand": "Firefox",
+    "expected_condition": "FAIR"
+  }
+]
