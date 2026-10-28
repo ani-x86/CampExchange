@@ -76,25 +76,12 @@ app.use('/api/nlp', nlpRouter);
 
 // Health check
 app.get('/api/health', async (_req, res) => {
-  let parsedDb = 'not set';
-  try {
-    const raw = process.env.DATABASE_URL || '';
-    const u = new URL(raw);
-    parsedDb = `${u.protocol}//${u.username}:***@${u.host}:${u.port}${u.pathname}${u.search}`;
-  } catch (e: any) {
-    parsedDb = `parse_error: ${e.message}`;
-  }
-
   try {
     const { prisma } = await import('./prisma/client.js');
     const userCount = await prisma.user.count();
-    const demoUser = await prisma.user.findUnique({
-      where: { prn: '241107068' },
-      select: { prn: true, name: true, role: true, isActive: true },
-    });
-    res.json({ ok: true, db: true, userCount, demoUser, dbConfig: parsedDb, timestamp: new Date().toISOString() });
+    res.json({ ok: true, db: true, userCount, timestamp: new Date().toISOString() });
   } catch (err: any) {
-    res.status(500).json({ ok: false, db: false, error: err?.message || String(err), dbConfig: parsedDb, timestamp: new Date().toISOString() });
+    res.status(500).json({ ok: false, db: false, error: err?.message || String(err), timestamp: new Date().toISOString() });
   }
 });
 
