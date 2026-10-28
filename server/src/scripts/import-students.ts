@@ -194,14 +194,18 @@ export const importStudents = async (options: ImportOptions = {}): Promise<Impor
         else summary.skipped += 1;
         summary.students.push(user);
       }
-    });
-  } catch {
+    }, { maxWait: 10_000, timeout: 60_000 });
+  } catch (error) {
     summary.created = 0;
     summary.updated = 0;
     summary.skipped = 0;
     summary.errors = 1;
     summary.students = [];
-    console.error('Student database import failed; the transaction was rolled back.');
+    const errorCode = typeof error === 'object' && error !== null && 'code' in error &&
+      typeof error.code === 'string'
+      ? error.code
+      : error instanceof Error ? error.name : 'unknown';
+    console.error(`Student database import failed (${errorCode}); the transaction was rolled back.`);
   } finally {
     students.length = 0;
   }
