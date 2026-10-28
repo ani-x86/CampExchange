@@ -14,11 +14,11 @@ import bcrypt from 'bcryptjs';
 import { prisma } from './client.js';
 
 const DEMO_ACCOUNTS = [
-  { prn: 'DEMO000001', rollNo: 90001, name: 'Demo Admin Alpha',   password: 'CampEx@Demo1' },
-  { prn: 'DEMO000002', rollNo: 90002, name: 'Demo Admin Beta',    password: 'CampEx@Demo2' },
-  { prn: 'DEMO000003', rollNo: 90003, name: 'Demo Admin Gamma',   password: 'CampEx@Demo3' },
-  { prn: 'DEMO000004', rollNo: 90004, name: 'Demo Admin Delta',   password: 'CampEx@Demo4' },
-  { prn: 'DEMO000005', rollNo: 90005, name: 'Demo Admin Epsilon', password: 'CampEx@Demo5' },
+  { prn: '241107068', rollNo: 241107068, name: 'Aniruddha',      password: 'CampEx@Aniruddha1' },
+  { prn: '241107069', rollNo: 241107069, name: 'Chandrashekar',  password: 'CampEx@Chandra2'   },
+  { prn: '241107070', rollNo: 241107070, name: 'Danish',         password: 'CampEx@Danish3'    },
+  { prn: '241107071', rollNo: 241107071, name: 'Manish',         password: 'CampEx@Manish4'    },
+  { prn: '241107072', rollNo: 241107072, name: 'Niraj',          password: 'CampEx@Niraj5'     },
 ] as const;
 
 async function seedDemoAccounts() {
